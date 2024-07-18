@@ -1,4 +1,5 @@
 // Purpose: DataContext class to connect to the database.
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
@@ -9,6 +10,7 @@ namespace Persistence
         {
         }
 
-        
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
