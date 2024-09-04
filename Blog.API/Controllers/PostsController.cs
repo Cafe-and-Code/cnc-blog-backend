@@ -8,9 +8,9 @@ namespace Blog.API.Controllers
     public class PostsController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok("Get all posts");
+            return Ok("Hello World");
         }
     }
 }

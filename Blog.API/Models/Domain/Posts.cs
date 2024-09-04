@@ -3,14 +3,14 @@
     public class Posts
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public string CategoryIds { get; set; }
+        public required string Title { get; set; }
+        public required string Content { get; set; }
+        public required string CategoryIds { get; set; }
         public Guid AuthorId { get; set; }
         public int Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public Categories Category { get; set; }
-        public Users Author { get; set; }
+        public required Categories Category { get; set; }
+        public required Users Author { get; set; }
     }
 }
