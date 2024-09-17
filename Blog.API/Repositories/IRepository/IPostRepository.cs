@@ -1,8 +1,8 @@
 ﻿using Blog.API.Models.Domain;
 
-namespace Blog.API.Repositories
+namespace Blog.API.Repositories.IRepository
 {
-    public interface IPostRepository : IBaseRepository<Posts>
+    public interface IPostRepository : IBaseRepository<Post>
     {
     }
 }

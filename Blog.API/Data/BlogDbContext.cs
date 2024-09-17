@@ -9,9 +9,9 @@ namespace Blog.API.Data
         {
         }
 
-        public DbSet<Users> Users { get; set; }
-        public DbSet<Posts> Posts { get; set; }
-        public DbSet<Categories> Categories { get; set; }
-        public DbSet<PostCategories> PostCategories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<PostCategory> PostCategories { get; set; }
     }
 }

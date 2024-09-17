@@ -1,9 +1,10 @@
 ﻿using Blog.API.Commons;
 using Blog.API.Data;
+using Blog.API.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Blog.API.Repositories
+namespace Blog.API.Repositories.Repository
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
@@ -12,52 +13,73 @@ namespace Blog.API.Repositories
         {
             _dbContext = dbContext;
         }
-        public void Add(TEntity entity)
+
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Add(entity);
-            _dbContext.SaveChanges();
+            await _dbContext.Set<TEntity>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
-        public void AddMany(IEnumerable<TEntity> entities)
+
+        public async Task<IEnumerable<TEntity>> AddManyAsync(IEnumerable<TEntity> entities)
         {
-            _dbContext.Set<TEntity>().AddRange(entities);
-            _dbContext.SaveChanges();
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
+            return entities;
         }
-        public void Delete(TEntity entity)
+
+        public async Task<TEntity> UpdateAsync(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Update(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<IEnumerable<TEntity>> UpdateManyAsync(IEnumerable<TEntity> entities)
+        {
+            _dbContext.Set<TEntity>().UpdateRange(entities);
+            await _dbContext.SaveChangesAsync();
+            return entities;
+        }
+
+        public async Task DeleteAsync(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
-        public void DeleteMany(Expression<Func<TEntity, bool>> predicate)
+
+        public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate)
         {
             var entities = Find(predicate);
             _dbContext.Set<TEntity>().RemoveRange(entities);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
-        public TEntity FindOne(Expression<Func<TEntity, bool>> predicate, LinqFindOptions? findOptions = null)
+
+        public async Task<List<TEntity>> GetAllAsync(LinqFindOptions? findOptions = null)
         {
-            return Get(findOptions).FirstOrDefault(predicate)!;
+            return await Get(findOptions).ToListAsync();
         }
+
+        public async Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate, LinqFindOptions? findOptions = null)
+        {
+            return await Get(findOptions).FirstOrDefaultAsync(predicate);
+        }
+
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, LinqFindOptions? findOptions = null)
         {
             return Get(findOptions).Where(predicate);
         }
-        public IQueryable<TEntity> GetAll(LinqFindOptions? findOptions = null)
+
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return Get(findOptions);
+            return await _dbContext.Set<TEntity>().AnyAsync(predicate);
         }
-        public void Update(TEntity entity)
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            _dbContext.Set<TEntity>().Update(entity);
-            _dbContext.SaveChanges();
+            return await _dbContext.Set<TEntity>().CountAsync(predicate);
         }
-        public bool Any(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _dbContext.Set<TEntity>().Any(predicate);
-        }
-        public int Count(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _dbContext.Set<TEntity>().Count(predicate);
-        }
+
         private DbSet<TEntity> Get(LinqFindOptions? findOptions = null)
         {
             findOptions ??= new LinqFindOptions();
