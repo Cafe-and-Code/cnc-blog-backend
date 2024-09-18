@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Blog.API.Commons;
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
@@ -41,6 +42,8 @@ namespace Blog.API.Controllers
 
             user.CreatedAt = currentDateTime;
             user.UpdatedAt = currentDateTime;
+            user.Role = (int)UserRole.User;
+            user.Status = (int)UserStatus.Active;
 
             await _userRepository.AddAsync(user);
             return Ok();
@@ -48,17 +51,15 @@ namespace Blog.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] AddUserDTO addUserDTO)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserDTO updateUserDTO)
         {
-            var user = _mapper.Map<User>(addUserDTO);
-            var currentDateTime = DateTime.UtcNow;
-
             if (!await _userRepository.AnyAsync(user => user.Id == id))
             {
                 return BadRequest();
             }
 
-            user.Id = id;
+            var user = _mapper.Map<User>(updateUserDTO);
+            var currentDateTime = DateTime.UtcNow;
             user.UpdatedAt = currentDateTime;
 
             await _userRepository.UpdateAsync(user);
