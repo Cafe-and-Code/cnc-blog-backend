@@ -4,8 +4,13 @@ using Blog.API.Repositories.IRepository;
 
 namespace Blog.API.Repositories.Repository
 {
-    public class UserRepository(BlogDbContext dbContext) : BaseRepository<User>(dbContext), IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly BlogDbContext dbContext;
+        private readonly BlogDbContext _dbContext;
+
+        public UserRepository(BlogDbContext dbContext) : base(dbContext)
+        {
+            _dbContext = dbContext;
+        }
     }
 }

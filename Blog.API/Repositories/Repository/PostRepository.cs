@@ -5,8 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.API.Repositories.Repository
 {
-    public class PostRepository(BlogDbContext dbContext) : BaseRepository<Post>(dbContext), IPostRepository
+    public class PostRepository : BaseRepository<Post>, IPostRepository
     {
-        private readonly BlogDbContext dbContext;
+        private readonly BlogDbContext _dbContext;
+
+        public PostRepository(BlogDbContext dbContext) : base(dbContext)
+        {
+            _dbContext = dbContext;
+        }
     }
 }
