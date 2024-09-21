@@ -12,8 +12,10 @@ namespace Blog.API.Mappings
             CreateMap<Models.Domain.User, Models.DTO.UpdateUserDTO>().ReverseMap();
 
             //Mapping for Post
-            CreateMap<Models.Domain.Post, Models.DTO.PostDTO>().ReverseMap();
-            CreateMap<Models.Domain.Post, Models.DTO.AddPostDTO>().ReverseMap();
+            CreateMap<Models.DTO.PostDTO, Models.Domain.Post>()
+                .ForPath(dest => dest.Author.FullName, opt => opt.MapFrom(src => src.Author))
+                .ReverseMap();
+
             CreateMap<Models.Domain.Post, Models.DTO.UpdatePostDTO>().ReverseMap();
             CreateMap<Models.Domain.PostCategory, Models.DTO.PostCategoryDTO>().ReverseMap();
 

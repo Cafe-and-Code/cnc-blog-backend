@@ -85,7 +85,7 @@ namespace Blog.API.Repositories.Repository
             return await _dbContext.Set<TEntity>().CountAsync(predicate);
         }
 
-        private DbSet<TEntity> Get(LinqFindOptions? findOptions = null)
+        protected DbSet<TEntity> Get(LinqFindOptions? findOptions = null)
         {
             findOptions ??= new LinqFindOptions();
             var entity = _dbContext.Set<TEntity>();

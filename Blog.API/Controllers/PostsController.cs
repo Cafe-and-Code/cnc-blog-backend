@@ -29,7 +29,7 @@ namespace Blog.API.Controllers
                 return NotFound();
             }
 
-            return Ok(posts);
+            return Ok(_mapper.Map<List<PostDTO>>(posts));
         }
 
         [HttpGet]
