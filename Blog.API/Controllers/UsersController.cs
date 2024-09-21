@@ -43,7 +43,6 @@ namespace Blog.API.Controllers
             user.CreatedAt = currentDateTime;
             user.UpdatedAt = currentDateTime;
             user.Role = (int)UserRole.User;
-            user.Status = (int)UserStatus.Active;
 
             await _userRepository.AddAsync(user);
             return Ok();
