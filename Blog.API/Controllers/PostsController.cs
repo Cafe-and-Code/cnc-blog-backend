@@ -2,7 +2,6 @@
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
-using Blog.API.Repositories.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
@@ -24,6 +23,12 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var posts = await _postRepository.GetAllAsync();
+
+            if (!posts.Any())
+            {
+                return NotFound();
+            }
+
             return Ok(posts);
         }
 
@@ -54,7 +59,7 @@ namespace Blog.API.Controllers
         {
             if (!await _postRepository.AnyAsync(post => post.Id == id))
             {
-                return BadRequest();
+                return NotFound();
             }
 
             var post = _mapper.Map<Post>(updatePostDTO);
@@ -73,7 +78,7 @@ namespace Blog.API.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await _postRepository.DeleteAsync(user);

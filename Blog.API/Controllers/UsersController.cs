@@ -3,11 +3,12 @@ using Blog.API.Commons;
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -23,7 +24,11 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var users = await _userRepository.GetAllAsync();
-            return Ok(users);
+            if (!users.Any())
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<List<UserDTO>>(users));
         }
 
         [HttpGet]
@@ -43,6 +48,7 @@ namespace Blog.API.Controllers
             user.CreatedAt = currentDateTime;
             user.UpdatedAt = currentDateTime;
             user.Role = (int)UserRole.User;
+            user.Password = user.Password.EncryptPassword();
 
             await _userRepository.AddAsync(user);
             return Ok();
@@ -54,7 +60,7 @@ namespace Blog.API.Controllers
         {
             if (!await _userRepository.AnyAsync(user => user.Id == id))
             {
-                return BadRequest();
+                return NotFound();
             }
 
             var user = _mapper.Map<User>(updateUserDTO);
@@ -73,7 +79,7 @@ namespace Blog.API.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await _userRepository.DeleteAsync(user);

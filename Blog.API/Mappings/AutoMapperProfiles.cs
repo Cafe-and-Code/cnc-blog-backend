@@ -7,7 +7,7 @@ namespace Blog.API.Mappings
         public AutoMapperProfiles()
         {
             //Mapping for User
-            CreateMap<Models.Domain.User, Models.DTO.UserDTO>().ReverseMap();
+            CreateMap<Models.DTO.UserDTO, Models.Domain.User>().ReverseMap();
             CreateMap<Models.Domain.User, Models.DTO.AddUserDTO>().ReverseMap();
             CreateMap<Models.Domain.User, Models.DTO.UpdateUserDTO>().ReverseMap();
 
@@ -19,6 +19,8 @@ namespace Blog.API.Mappings
 
             //Mapping for Category
             CreateMap<Models.Domain.Category, Models.DTO.CategoryDTO>().ReverseMap();
+            CreateMap<Models.Domain.Category, Models.DTO.AddCategoryDTO>().ReverseMap();
+            CreateMap<Models.Domain.Category, Models.DTO.UpdateCategoryDTO>().ReverseMap();
         }
     }
 }
