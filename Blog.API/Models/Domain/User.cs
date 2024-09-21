@@ -10,8 +10,8 @@
         public DateOnly DateOfBirth { get; set; }
         public string? AvatarImageUrl { get; set; }
         public int Role { get; set; }
-        public int Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

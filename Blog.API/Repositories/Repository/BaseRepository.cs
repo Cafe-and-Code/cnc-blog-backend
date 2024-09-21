@@ -65,6 +65,11 @@ namespace Blog.API.Repositories.Repository
             return await Get(findOptions).FirstOrDefaultAsync(predicate);
         }
 
+        public async Task<List<TEntity>> FindManyAsync(Expression<Func<TEntity, bool>> predicate, LinqFindOptions? findOptions = null)
+        {
+            return await Get(findOptions).Where(predicate).ToListAsync();
+        }
+
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, LinqFindOptions? findOptions = null)
         {
             return Get(findOptions).Where(predicate);
