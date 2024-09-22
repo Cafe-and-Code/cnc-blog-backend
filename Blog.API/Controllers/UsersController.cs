@@ -58,13 +58,15 @@ namespace Blog.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserDTO updateUserDTO)
         {
-            if (!await _userRepository.AnyAsync(user => user.Id == id))
+            var user = await _userRepository.FindOneAsync(user => user.Id == id);
+
+            if (user == null)
             {
                 return NotFound();
             }
 
-            var user = _mapper.Map<User>(updateUserDTO);
             var currentDateTime = DateTime.UtcNow;
+            user.Id = id;
             user.UpdatedAt = currentDateTime;
 
             await _userRepository.UpdateAsync(user);

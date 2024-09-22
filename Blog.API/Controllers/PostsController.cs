@@ -63,8 +63,7 @@ namespace Blog.API.Controllers
             }
 
             var post = _mapper.Map<Post>(updatePostDTO);
-            var currentDateTime = DateTime.UtcNow;
-            post.UpdatedAt = currentDateTime;
+            post.Id = id;
 
             await _postRepository.UpdateAsync(post);
             return Ok();

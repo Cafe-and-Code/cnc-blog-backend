@@ -5,5 +5,6 @@ namespace Blog.API.Repositories.IRepository
     public interface IPostRepository : IBaseRepository<Post>
     {
         Task<List<Post>> GetAllAsync();
+        Task<Post?> UpdateAsync(Post post);
     }
 }

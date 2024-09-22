@@ -19,5 +19,22 @@ namespace Blog.API.Repositories.Repository
         {
             return await _dbContext.Posts.Include("Author").Where(post => !post.IsDeleted && post.Status == (int)PostStatus.Public).OrderByDescending(post => post.CreatedAt).ToListAsync();
         }
+
+        public async Task<Post?> UpdateAsync(Post post)
+        {
+            var currentPost = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == post.Id);
+            if (currentPost == null)
+            {
+                return null;
+            }
+            currentPost.Title = post.Title;
+            currentPost.Content = post.Content;
+            currentPost.Status = post.Status;
+            currentPost.UpdatedAt = DateTime.UtcNow;
+
+            _dbContext.Set<Post>().Update(currentPost);
+            await _dbContext.SaveChangesAsync();
+            return currentPost;
+        }
     }
 }
