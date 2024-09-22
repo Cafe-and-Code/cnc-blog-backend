@@ -43,13 +43,8 @@ namespace Blog.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddPostDTO addPostDTO)
         {
-            var post = _mapper.Map<Post>(addPostDTO);
-            var currentDateTime = DateTime.UtcNow;
+            await _postRepository.AddAsync(_mapper.Map<Post>(addPostDTO));
 
-            post.CreatedAt = currentDateTime;
-            post.UpdatedAt = currentDateTime;
-
-            await _postRepository.AddAsync(post);
             return Ok();
         }
 
