@@ -16,6 +16,7 @@ namespace Blog.API.Mappings
                 .ForPath(dest => dest.Author.FullName, opt => opt.MapFrom(src => src.Author))
                 .ReverseMap();
 
+            CreateMap<Models.Domain.Post, Models.DTO.AddPostDTO>().ReverseMap();
             CreateMap<Models.Domain.Post, Models.DTO.UpdatePostDTO>().ReverseMap();
             CreateMap<Models.Domain.PostCategory, Models.DTO.PostCategoryDTO>().ReverseMap();
 
