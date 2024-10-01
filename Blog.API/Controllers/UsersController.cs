@@ -42,16 +42,21 @@ namespace Blog.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddUserDTO addUserDTO)
         {
-            var user = _mapper.Map<User>(addUserDTO);
-            var currentDateTime = DateTime.UtcNow;
+            if (ModelState.IsValid)
+            {
+                var user = _mapper.Map<User>(addUserDTO);
+                var currentDateTime = DateTime.UtcNow;
 
-            user.CreatedAt = currentDateTime;
-            user.UpdatedAt = currentDateTime;
-            user.Role = (int)UserRole.User;
-            user.Password = user.Password.EncryptPassword();
+                user.CreatedAt = currentDateTime;
+                user.UpdatedAt = currentDateTime;
+                user.Role = (int)UserRole.User;
+                user.Password = user.Password.EncryptPassword();
 
-            await _userRepository.AddAsync(user);
-            return Ok();
+                await _userRepository.AddAsync(user);
+                return Ok();
+            }
+            
+            return BadRequest(ModelState);
         }
 
         [HttpPut]
