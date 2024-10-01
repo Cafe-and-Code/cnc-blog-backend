@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Commons
 {
@@ -14,6 +16,17 @@ namespace Blog.API.Commons
                 var hashedBytes = sha256.ComputeHash(passwordBytes);
                 var hashedPassword = Encoding.UTF8.GetString(hashedBytes);
                 return hashedPassword;
+            }
+        }
+    }
+
+    public class ValidationModelAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            if (context.ModelState.IsValid == false)
+            {
+                context.Result = new BadRequestResult();
             }
         }
     }

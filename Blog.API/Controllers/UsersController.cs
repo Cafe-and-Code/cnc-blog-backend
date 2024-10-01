@@ -40,27 +40,24 @@ namespace Blog.API.Controllers
         }
 
         [HttpPost]
+        [ValidationModel]
         public async Task<IActionResult> Create([FromBody] AddUserDTO addUserDTO)
         {
-            if (ModelState.IsValid)
-            {
-                var user = _mapper.Map<User>(addUserDTO);
-                var currentDateTime = DateTime.UtcNow;
+            var user = _mapper.Map<User>(addUserDTO);
+            var currentDateTime = DateTime.UtcNow;
 
-                user.CreatedAt = currentDateTime;
-                user.UpdatedAt = currentDateTime;
-                user.Role = (int)UserRole.User;
-                user.Password = user.Password.EncryptPassword();
+            user.CreatedAt = currentDateTime;
+            user.UpdatedAt = currentDateTime;
+            user.Role = (int)UserRole.User;
+            user.Password = user.Password.EncryptPassword();
 
-                await _userRepository.AddAsync(user);
-                return Ok();
-            }
-            
-            return BadRequest(ModelState);
+            await _userRepository.AddAsync(user);
+            return Ok();
         }
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidationModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserDTO updateUserDTO)
         {
             var user = await _userRepository.FindOneAsync(user => user.Id == id);
