@@ -19,5 +19,10 @@
         public const string ErrorDateOfBirthRequiredMessage = "Date of birth is required.";
         public const string ErrorInvalidDateMessage = "Invalid date format.";
         public const string ErrorInvalidDateOfBirthMessage = "Date of birth cannot be in the future and must be at least 10 years old.";
+
+        /// <summary>
+        /// Authen User
+        /// </summary>
+        public const string InvalidUsernameOrPasswordMessage = "Invalid username or password.";
     }
 }

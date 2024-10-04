@@ -3,6 +3,7 @@ using Blog.API.Commons;
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
@@ -21,6 +22,7 @@ namespace Blog.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userRepository.GetAllAsync();
@@ -66,6 +68,7 @@ namespace Blog.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize]
         [ValidationModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserDTO updateUserDTO)
         {
@@ -86,6 +89,7 @@ namespace Blog.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = nameof(UserRole.Admin))]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var user = await _userRepository.FindOneAsync(user => user.Id == id);
