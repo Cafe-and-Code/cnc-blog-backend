@@ -43,6 +43,15 @@ namespace Blog.API.Controllers
         [ValidationModel]
         public async Task<IActionResult> Create([FromBody] AddUserDTO addUserDTO)
         {
+            if (await _userRepository.AnyAsync(u => addUserDTO.Username.ToLower().Equals(u.Username.ToLower())))
+            {
+                return StatusCode(409, $"Username '{addUserDTO.Username}' already exists.");
+            }
+            if (await _userRepository.AnyAsync(u => addUserDTO.Email.ToLower().Equals(u.Email.ToLower())))
+            {
+                return StatusCode(409, $"Email '{addUserDTO.Email}' already exists.");
+            }
+
             var user = _mapper.Map<User>(addUserDTO);
             var currentDateTime = DateTime.UtcNow;
 
