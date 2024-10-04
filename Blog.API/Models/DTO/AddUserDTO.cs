@@ -25,7 +25,7 @@ namespace Blog.API.Models.DTO
 
         [MinLength(5, ErrorMessage = Constants.ErrorFullNameLengthMessage)]
         [MaxLength(100, ErrorMessage = Constants.ErrorFullNameLengthMessage)]
-        [RegularExpression(@"^[^ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỂưăạảấầẩẫậắằẳẵặẹẻẽềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s ]+$", ErrorMessage = Constants.ErrorFullNameTypeMessage)]
+        ///[RegularExpression(@"^[^ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỂưăạảấầẩẫậắằẳẵặẹẻẽềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s ]+$", ErrorMessage = Constants.ErrorFullNameTypeMessage)]
         [Required(ErrorMessage = Constants.ErrorFullNameRequiredMessage)]
         public string FullName { get; set; } = string.Empty;
 
