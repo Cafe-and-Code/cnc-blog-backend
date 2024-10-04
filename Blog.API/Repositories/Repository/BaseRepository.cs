@@ -50,7 +50,7 @@ namespace Blog.API.Repositories.Repository
 
         public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var entities = Find(predicate);
+            var entities = await Find(predicate).ToListAsync();
             _dbContext.Set<TEntity>().RemoveRange(entities);
             await _dbContext.SaveChangesAsync();
         }
