@@ -1,8 +1,6 @@
-﻿using System.Text;
-using System.Security.Cryptography;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Blog.API.Commons
 {
@@ -10,13 +8,12 @@ namespace Blog.API.Commons
     {
         public static string EncryptPassword(this string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var passwordBytes = Encoding.UTF8.GetBytes(password);
-                var hashedBytes = sha256.ComputeHash(passwordBytes);
-                var hashedPassword = Encoding.UTF8.GetString(hashedBytes);
-                return hashedPassword;
-            }
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public static bool ValidatePassword(this string password, string hashPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashPassword);
         }
     }
 

@@ -2,6 +2,7 @@
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
@@ -24,7 +25,7 @@ namespace Blog.API.Controllers
         {
             var posts = await _postRepository.GetAllAsync();
 
-            if (!posts.Any())
+            if (posts.Count == 0)
             {
                 return NotFound();
             }
@@ -41,6 +42,7 @@ namespace Blog.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] AddPostDTO addPostDTO)
         {
             await _postRepository.AddAsync(_mapper.Map<Post>(addPostDTO));
@@ -50,6 +52,7 @@ namespace Blog.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdatePostDTO updatePostDTO)
         {
             if (!await _postRepository.AnyAsync(post => post.Id == id))
@@ -66,6 +69,7 @@ namespace Blog.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var user = await _postRepository.FindOneAsync(post => post.Id == id);
