@@ -15,9 +15,10 @@ namespace Blog.API.Repositories.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<List<Post>> GetAllAsync()
+        public async Task<List<Post>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await _dbContext.Posts.Include("Author").Where(post => !post.IsDeleted && post.Status == (int)PostStatus.Public).OrderByDescending(post => post.CreatedAt).ToListAsync();
+            var skipResult = (pageNumber - 1) * pageSize;
+            return await _dbContext.Posts.Include("Author").Where(post => !post.IsDeleted && post.Status == (int)PostStatus.Public).OrderByDescending(post => post.CreatedAt).Skip(skipResult).Take(pageSize).ToListAsync();
         }
 
         public new async Task<Post> AddAsync(Post post)
