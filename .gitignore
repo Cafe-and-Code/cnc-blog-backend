@@ -235,3 +235,6 @@ _Pvt_Extensions
 
 # Mac hidden file
 .DS_Store
+
+#Hide Image upload folder
+Images/
