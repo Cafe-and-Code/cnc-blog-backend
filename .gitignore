@@ -238,3 +238,6 @@ _Pvt_Extensions
 
 #Hide Image upload folder
 Images/
+
+#Hide Logs file
+Logs/
