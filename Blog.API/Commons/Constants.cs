@@ -24,5 +24,10 @@
         /// Authen User
         /// </summary>
         public const string InvalidUsernameOrPasswordMessage = "Invalid username or password.";
+
+        /// <summary>
+        /// Exception Log
+        /// </summary>
+        public const string ExceptionMessage = "Something went wrong! We are looking into resolving this.";
     }
 }
