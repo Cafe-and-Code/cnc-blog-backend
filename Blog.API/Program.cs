@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//Add Logging provider
+// Add Logging provider
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/CNCBlog_Log.txt", rollingInterval: RollingInterval.Day)
@@ -61,7 +61,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Add repositories
+// Add repositories
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
@@ -69,10 +69,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
-//Add AutoMapper
+// Add AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-//Add JWT Authentication
+// Add JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey))
 {
@@ -94,6 +94,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -101,6 +112,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    // Use CORS middleware in development environment
+    app.UseCors("AllowAll");
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
