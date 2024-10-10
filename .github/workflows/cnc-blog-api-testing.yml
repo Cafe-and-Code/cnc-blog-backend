@@ -19,7 +19,7 @@ jobs:
     - name: Apply appsettings
       shell: bash
       run: |
-        cp C:/secret_config/appsettings.json ./appsettings.json
+        cp C:/secret_config/Blog.API/appsettings.json ./appsettings.json
         rm -f Blog.API/appsettings.Development.json
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
