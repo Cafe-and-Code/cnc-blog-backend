@@ -36,7 +36,7 @@ jobs:
     - name: Deploy
       run: |
         cd Blog.API
-        cd Blog.API
+        
         echo "Enabling anonymous authentication..."
         powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value true -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
         if ($LASTEXITCODE -ne 0) { echo "Failed to enable anonymous authentication"; exit $LASTEXITCODE }
