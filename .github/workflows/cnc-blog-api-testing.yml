@@ -41,7 +41,7 @@ jobs:
       run: |
         cd Blog.API
         echo "Database is updating..."
-        dotnet ef database update --project Blog.API --startup-project Blog.API
+        dotnet ef database update
     - name: Deploy
       run: |
         cd Blog.API
