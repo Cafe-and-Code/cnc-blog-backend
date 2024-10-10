@@ -37,11 +37,6 @@ jobs:
       run: |
         cd Blog.API
         dotnet test --no-build --verbosity normal
-    - name: Update Database
-      run: |
-        cd Blog.API
-        echo "Database is updating..."
-        dotnet ef database update
     - name: Deploy
       run: |
         cd Blog.API
