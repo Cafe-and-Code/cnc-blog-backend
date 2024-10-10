@@ -30,7 +30,9 @@ jobs:
         dotnet build --configuration Release
         dotnet publish -c release -o ./publish
     - name: Test
-      run: cd Blog.API && dotnet test --no-build --verbosity normal
+      run: |
+        cd Blog.API
+        dotnet test --no-build --verbosity normal
     - name: Deploy
       run: |
         cd Blog.API
