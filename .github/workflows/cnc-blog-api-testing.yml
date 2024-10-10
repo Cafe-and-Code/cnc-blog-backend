@@ -16,6 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Apply appsettings
+      shell: bash
+      run: |
+        cp C:/secret_config/appsettings.json ./appsettings.json
+        rm -f Blog.API/appsettings.Development.json
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -33,6 +38,10 @@ jobs:
       run: |
         cd Blog.API
         dotnet test --no-build --verbosity normal
+    - name: Update Database
+      run: |
+        cd Blog.API
+        dotnet ef database update --project Blog.API --startup-project Blog.API
     - name: Deploy
       run: |
         cd Blog.API
