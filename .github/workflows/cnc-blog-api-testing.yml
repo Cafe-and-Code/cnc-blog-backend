@@ -38,5 +38,8 @@ jobs:
         cd Blog.API
         powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value true -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
         powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/windowsAuthentication -name enabled -value false -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
+        
+        echo "Copying files to the web root..."
         robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z
-        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        $robocopyExitCode = $LASTEXITCODE
+        if ($robocopyExitCode -ge 8) { echo "File copy failed with exit code $robocopyExitCode"; exit $robocopyExitCode }
