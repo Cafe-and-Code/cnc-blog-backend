@@ -36,15 +36,7 @@ jobs:
     - name: Deploy
       run: |
         cd Blog.API
-        
-        echo "Enabling anonymous authentication..."
-        powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value true -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
-        if ($LASTEXITCODE -ne 0) { echo "Failed to enable anonymous authentication"; exit $LASTEXITCODE }
-        
-        echo "Disabling Windows authentication..."
-        powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/windowsAuthentication -name enabled -value false -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
-        if ($LASTEXITCODE -ne 0) { echo "Failed to disable Windows authentication"; exit $LASTEXITCODE }
-        
+
         echo "Copying files to the web root..."
         robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z
         $robocopyExitCode = $LASTEXITCODE
