@@ -36,6 +36,6 @@ jobs:
     - name: Deploy
       run: |
         cd Blog.API
-        powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value true -PSPath "IIS:\Sites\YourSiteName"
-        powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/windowsAuthentication -name enabled -value false -PSPath "IIS:\Sites\YourSiteName"
-        robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z /Y
+        powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value true -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
+        powershell Set-WebConfigurationProperty -filter /system.webServer/security/authentication/windowsAuthentication -name enabled -value false -PSPath "IIS:\Sites\apitesting.cafencode.ddns.net"
+        robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z
