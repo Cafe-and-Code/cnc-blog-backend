@@ -36,7 +36,6 @@ jobs:
     - name: Deploy
       run: |
         cd Blog.API
-
         echo "Copying files to the web root..."
         robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z
         $robocopyExitCode = $LASTEXITCODE
