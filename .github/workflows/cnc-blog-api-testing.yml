@@ -18,8 +18,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Apply appsettings
       run: |
-        Copy-Item -Path "C:/secret_config/Blog.API/appsettings.json" -Destination "./cnc-blog-backend/Blog.API/appsettings.json"
-        Remove-Item -Path "./cnc-blog-backend/Blog.API/appsettings.Development.json" -Force
+        Copy-Item -Path "C:/secret_config/Blog.API/appsettings.json" -Destination "./Blog.API/appsettings.json"
+        Remove-Item -Path "./Blog.API/appsettings.Development.json" -Force
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
