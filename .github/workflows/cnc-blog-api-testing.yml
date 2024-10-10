@@ -40,6 +40,7 @@ jobs:
     - name: Update Database
       run: |
         cd Blog.API
+        echo "Database is updating..."
         dotnet ef database update --project Blog.API --startup-project Blog.API
     - name: Deploy
       run: |
