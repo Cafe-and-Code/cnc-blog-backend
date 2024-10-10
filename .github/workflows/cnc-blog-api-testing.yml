@@ -42,3 +42,4 @@ jobs:
         $robocopyExitCode = $LASTEXITCODE
         if ($robocopyExitCode -ge 8) { echo "File copy failed with exit code $robocopyExitCode"; exit $robocopyExitCode }
         echo "Complete Copy files to the web root."
+        exit 0
