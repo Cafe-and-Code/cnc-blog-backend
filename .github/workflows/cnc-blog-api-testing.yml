@@ -37,10 +37,6 @@ jobs:
       run: |
         cd Blog.API
         dotnet test --no-build --verbosity normal
-    - name: Install dotnet-ef tool
-      run: |
-        dotnet tool install --global dotnet-ef
-        echo "::add-path::$(dotnet --list-tools | grep dotnet-ef | awk '{print $2}')"
     - name: Update Database
       run: |
         cd Blog.API
