@@ -34,6 +34,7 @@ namespace Blog.API.Controllers
                     FileSizeInBytes = request.File.Length,
                     FileName = request.FileName,
                     FileDescription = request.FileDescription,
+                    FilePath = string.Empty
                 };
 
 
