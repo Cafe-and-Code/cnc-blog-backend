@@ -39,7 +39,8 @@ namespace Blog.API.Controllers
 
             var userRole = ((UserRole)user.Role).ToString();
             var token = _tokenRepository.CreateJWTToken(user, userRole);
-            return Ok(token);
+
+            return Ok(new ResultLoginDTO(user.Id, userRole, token));
         }
     }
 }
