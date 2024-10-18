@@ -39,7 +39,10 @@ namespace Blog.API.Controllers
 
             var userRole = ((UserRole)user.Role).ToString();
             var token = _tokenRepository.CreateJWTToken(user, userRole);
-            return Ok(token);
+
+            var objUser = new { UserId = user.Id, Token = token };
+
+            return Ok(objUser);
         }
     }
 }
