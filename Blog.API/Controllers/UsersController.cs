@@ -47,11 +47,22 @@ namespace Blog.API.Controllers
         {
             if (await _userRepository.AnyAsync(u => addUserDTO.Username.ToLower().Equals(u.Username.ToLower())))
             {
-                return StatusCode(409, $"Username '{addUserDTO.Username}' already exists.");
+                var errorResponse = new ApiErrorResponse(
+                    StatusCode: StatusCodes.Status409Conflict,
+                    StatusPhrase: "Conflict",
+                    Errors: new List<string> { $"Username '{addUserDTO.Username}' already exists." }
+                );
+                return StatusCode(409, errorResponse);
             }
+
             if (await _userRepository.AnyAsync(u => addUserDTO.Email.ToLower().Equals(u.Email.ToLower())))
             {
-                return StatusCode(409, $"Email '{addUserDTO.Email}' already exists.");
+                var errorResponse = new ApiErrorResponse(
+                    StatusCode: StatusCodes.Status409Conflict,
+                    StatusPhrase: "Conflict",
+                    Errors: new List<string> { $"Email '{addUserDTO.Email}' already exists." }
+                );
+                return StatusCode(409, errorResponse);
             }
 
             var user = _mapper.Map<User>(addUserDTO);

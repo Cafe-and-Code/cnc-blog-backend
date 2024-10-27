@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace Blog.API.Commons
 {
@@ -19,11 +20,22 @@ namespace Blog.API.Commons
 
     public class ValidationModelAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuted(ActionExecutedContext context)
+        public override void OnResultExecuting(ResultExecutingContext context)
         {
-            if (context.ModelState.IsValid == false)
+            if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestResult();
+                var apiError = new ApiErrorResponse();
+                var errors = context.ModelState.AsEnumerable();
+
+                foreach (var error in errors)
+                {
+                    foreach (var inner in error.Value!.Errors)
+                    {
+                        apiError.Errors.Add(inner.ErrorMessage);
+                    }
+                }
+
+                context.Result = new BadRequestObjectResult(apiError);
             }
         }
     }
