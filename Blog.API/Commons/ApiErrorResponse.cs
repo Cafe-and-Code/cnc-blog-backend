@@ -36,9 +36,9 @@ namespace Blog.API.Commons
         {
             this.StatusCode = StatusCode;
             this.StatusPhrase = StatusPhrase;
+            this.ErrorID = ErrorID;
             Errors = new List<string> { Error };
             Timestamp = DateTime.UtcNow;
-            this.ErrorID = ErrorID;
         }
 
         public int StatusCode { get; set; }
