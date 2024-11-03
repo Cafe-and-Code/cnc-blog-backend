@@ -7,7 +7,6 @@ namespace Blog.API.Repositories.IRepository
     {
         Task<List<Post>> GetAllAsync(int pageNumber = 1, int pageSize = 10);
         new Task<Post> AddAsync(Post post);
-
         new Task<Post> UpdateAsync(Post post);
     }
 }

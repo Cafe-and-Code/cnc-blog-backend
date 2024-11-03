@@ -1,4 +1,5 @@
 ﻿using Blog.API.Commons;
+using Blog.API.Models.DTO;
 using System.Net;
 
 namespace Blog.API.Middlewares
@@ -33,13 +34,9 @@ namespace Blog.API.Middlewares
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 httpContext.Response.ContentType = "application/json";
 
-                var error = new
-                {
-                    Id = errorId,
-                    ErrorMessage = Constants.ExceptionMessage
-                };
-
-                await httpContext.Response.WriteAsJsonAsync(error);
+                await httpContext.Response.WriteAsJsonAsync(
+                    new ApiErrorResponse(StatusCodes.Status500InternalServerError, "Internal Server Error", errorId, Constants.ExceptionMessage)
+                );
             }
         }
     }
