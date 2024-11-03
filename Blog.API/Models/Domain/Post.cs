@@ -10,7 +10,7 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
-
         public required User Author { get; set; }
+        public ICollection<PostCategory>? PostCategory { get; set; }
     }
 }

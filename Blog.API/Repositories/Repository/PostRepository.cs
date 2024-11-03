@@ -18,8 +18,17 @@ namespace Blog.API.Repositories.Repository
         public async Task<List<Post>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
             var skipResult = (pageNumber - 1) * pageSize;
-            return await _dbContext.Posts.Include("Author").Where(post => !post.IsDeleted && post.Status == (int)PostStatus.Public).OrderByDescending(post => post.CreatedAt).Skip(skipResult).Take(pageSize).ToListAsync();
+            return await _dbContext.Posts
+                .Include(post => post.Author)
+                .Include(post => post.PostCategory!)
+                    .ThenInclude(postCategory => postCategory.Category)
+                .Where(post => !post.IsDeleted && post.Status == (int)PostStatus.Public)
+                .OrderByDescending(post => post.CreatedAt)
+                .Skip(skipResult)
+                .Take(pageSize)
+                .ToListAsync();
         }
+
 
         public new async Task<Post> AddAsync(Post post)
         {

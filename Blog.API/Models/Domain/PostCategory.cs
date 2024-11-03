@@ -6,7 +6,7 @@
         public Guid PostId { get; set; }
         public Guid CategoryId { get; set; }
 
-        public required Post post { get; set; }
-        public required Category category { get; set; }
+        public required Post Post { get; set; }
+        public required Category Category { get; set; }
     }
 }
