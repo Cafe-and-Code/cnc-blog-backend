@@ -29,7 +29,6 @@ namespace Blog.API.Repositories.Repository
                 .ToListAsync();
         }
 
-
         public new async Task<Post> AddAsync(Post post)
         {
             var currentDateTime = DateTime.UtcNow;
