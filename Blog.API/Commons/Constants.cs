@@ -1,4 +1,6 @@
-﻿namespace Blog.API.Commons
+﻿using Blog.API.Models.DTO;
+
+namespace Blog.API.Commons
 {
     public static class Constants
     {
@@ -23,7 +25,12 @@
         /// <summary>
         /// Authen User
         /// </summary>
+        public const string Conflict = "Conflict";
+        public const string Unauthorized = "Unauthorized";
+        public const string NotFound = "NotFound";
         public const string InvalidUsernameOrPasswordMessage = "Invalid username or password.";
+        public const string UsernameAlreadyExists = "Username '{0}' already exists.";
+        public const string EmailAlreadyExists = "Email '{0}' already exists.";
 
         /// <summary>
         /// Exception Log

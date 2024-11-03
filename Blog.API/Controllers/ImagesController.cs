@@ -2,6 +2,7 @@
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
+using Blog.API.Commons;
 
 namespace Blog.API.Controllers
 {
@@ -22,9 +23,10 @@ namespace Blog.API.Controllers
         [Route("Upload")]
         public async Task<IActionResult> Upload([FromForm] ImageUploadDTO request)
         {
-            ValidateFileUpload(request);
+            var apiError = new ApiErrorResponse();
+            ValidateFileUpload(request, apiError);
 
-            if (ModelState.IsValid)
+            if (!apiError.Errors.Any())
             {
                 // convert DTO to Domain model
                 var imageDomainModel = new Image
@@ -37,29 +39,28 @@ namespace Blog.API.Controllers
                     FilePath = string.Empty
                 };
 
-
                 // User repository to upload image
                 await imageRepository.Upload(imageDomainModel);
 
                 return Ok(imageDomainModel);
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(apiError);
         }
 
 
-        private void ValidateFileUpload(ImageUploadDTO request)
+        private void ValidateFileUpload(ImageUploadDTO request, ApiErrorResponse apiError)
         {
             var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
 
             if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName)))
             {
-                ModelState.AddModelError("file", "Unsupported file extension");
+                apiError.Errors.Add("Unsupported file extension");
             }
 
             if (request.File.Length > 10485760)
             {
-                ModelState.AddModelError("file", "File size more than 10MB, please upload a smaller size file.");
+                apiError.Errors.Add("File size more than 10MB, please upload a smaller size file.");
             }
         }
     }

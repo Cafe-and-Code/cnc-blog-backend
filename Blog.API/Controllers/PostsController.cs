@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Blog.API.Commons;
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
@@ -27,7 +28,9 @@ namespace Blog.API.Controllers
 
             if (posts.Count == 0)
             {
-                return NotFound();
+                return NotFound(
+                    new ApiErrorResponse(StatusCodes.Status404NotFound, Constants.NotFound, Constants.NotFound)
+                );
             }
 
             return Ok(_mapper.Map<List<PostDTO>>(posts));
@@ -57,7 +60,9 @@ namespace Blog.API.Controllers
         {
             if (!await _postRepository.AnyAsync(post => post.Id == id))
             {
-                return NotFound();
+                return NotFound(
+                    new ApiErrorResponse(StatusCodes.Status404NotFound, Constants.NotFound, Constants.NotFound)
+                );
             }
 
             var post = _mapper.Map<Post>(updatePostDTO);
@@ -76,7 +81,9 @@ namespace Blog.API.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound(
+                    new ApiErrorResponse(StatusCodes.Status404NotFound, Constants.NotFound, Constants.NotFound)
+                );
             }
 
             await _postRepository.DeleteAsync(user);

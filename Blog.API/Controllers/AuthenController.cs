@@ -29,12 +29,16 @@ namespace Blog.API.Controllers
             var user = await _userRepository.FindOneAsync(u => loginDTO.Username.Equals(u.Username));
             if (user == null)
             {
-                return Unauthorized(Constants.InvalidUsernameOrPasswordMessage);
+                return Unauthorized(
+                    new ApiErrorResponse(StatusCodes.Status401Unauthorized, Constants.Unauthorized, Constants.InvalidUsernameOrPasswordMessage)
+                );
             }
 
             if (!loginDTO.Password.ValidatePassword(user.Password))
             {
-                return Unauthorized(Constants.InvalidUsernameOrPasswordMessage);
+                return Unauthorized(
+                    new ApiErrorResponse(StatusCodes.Status401Unauthorized, Constants.Unauthorized, Constants.InvalidUsernameOrPasswordMessage)
+                );
             }
 
             var userRole = ((UserRole)user.Role).ToString();

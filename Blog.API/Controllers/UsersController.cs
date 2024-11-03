@@ -28,7 +28,9 @@ namespace Blog.API.Controllers
             var users = await _userRepository.GetAllAsync();
             if (!users.Any())
             {
-                return NotFound();
+                return NotFound(
+                    new ApiErrorResponse(StatusCodes.Status404NotFound, Constants.NotFound, Constants.NotFound)
+                );
             }
             return Ok(_mapper.Map<List<UserDTO>>(users));
         }
@@ -47,14 +49,18 @@ namespace Blog.API.Controllers
         {
             if (await _userRepository.AnyAsync(u => addUserDTO.Username.ToLower().Equals(u.Username.ToLower())))
             {
-                var errorResponse = new ApiErrorResponse(StatusCodes.Status409Conflict, "Conflict", $"Username '{addUserDTO.Username}' already exists.");
-                return StatusCode(StatusCodes.Status409Conflict, errorResponse);
+                return StatusCode(
+                    StatusCodes.Status409Conflict,
+                    new ApiErrorResponse(StatusCodes.Status409Conflict, Constants.Conflict, string.Format(Constants.UsernameAlreadyExists, addUserDTO.Username))
+                );
             }
 
             if (await _userRepository.AnyAsync(u => addUserDTO.Email.ToLower().Equals(u.Email.ToLower())))
             {
-                var errorResponse = new ApiErrorResponse(StatusCodes.Status409Conflict, "Conflict", $"Email '{addUserDTO.Email}' already exists.");
-                return StatusCode(StatusCodes.Status409Conflict, errorResponse);
+                return StatusCode(
+                    StatusCodes.Status409Conflict,
+                    new ApiErrorResponse(StatusCodes.Status409Conflict, Constants.Conflict, string.Format(Constants.EmailAlreadyExists, addUserDTO.Email))
+                );
             }
 
             var user = _mapper.Map<User>(addUserDTO);
@@ -99,7 +105,9 @@ namespace Blog.API.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound(
+                    new ApiErrorResponse(StatusCodes.Status404NotFound, Constants.NotFound, Constants.NotFound)
+                );
             }
 
             await _userRepository.DeleteAsync(user);
