@@ -5,7 +5,6 @@ using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Blog.API.Controllers
 {
