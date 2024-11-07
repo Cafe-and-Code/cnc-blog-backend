@@ -51,9 +51,9 @@ namespace Blog.API.Controllers
 
         private void ValidateFileUpload(ImageUploadDTO request, ApiErrorResponse apiError)
         {
-            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".gif", "webp" };
 
-            if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName)))
+            if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName).ToLower()))
             {
                 apiError.Errors.Add("Unsupported file extension");
             }
