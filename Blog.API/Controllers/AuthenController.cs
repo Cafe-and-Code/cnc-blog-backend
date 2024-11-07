@@ -24,6 +24,7 @@ namespace Blog.API.Controllers
 
         [HttpPost]
         [Route("Login")]
+        [ValidationModel]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             var user = await _userRepository.FindOneAsync(u => loginDTO.Username.Equals(u.Username));
