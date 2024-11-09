@@ -4,7 +4,7 @@ using Blog.API.Repositories.IRepository;
 
 namespace Blog.API.Repositories.Repository
 {
-    public class ImageRepository : IImageRepository
+    public class ImageRepository : BaseRepository<Image>, IImageRepository
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -12,7 +12,7 @@ namespace Blog.API.Repositories.Repository
 
         public ImageRepository(IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor,
-            BlogDbContext dbContext)
+            BlogDbContext dbContext): base(dbContext)
         {
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;

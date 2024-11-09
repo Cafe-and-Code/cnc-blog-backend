@@ -3,6 +3,7 @@ using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
 using Blog.API.Commons;
+using Blog.API.Repositories.Repository;
 
 namespace Blog.API.Controllers
 {
@@ -10,13 +11,19 @@ namespace Blog.API.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
-        private readonly IImageRepository imageRepository;
+        private readonly IImageRepository _imageRepository;
 
         public ImagesController(IImageRepository imageRepository)
         {
-            this.imageRepository = imageRepository;
+            _imageRepository = imageRepository;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var images = await _imageRepository.GetAllAsync();
+            return Ok(images);
+        }
 
         // POST: /api/Images/Upload
         [HttpPost]
@@ -40,7 +47,7 @@ namespace Blog.API.Controllers
                 };
 
                 // User repository to upload image
-                await imageRepository.Upload(imageDomainModel);
+                await _imageRepository.Upload(imageDomainModel);
 
                 return Ok(imageDomainModel);
             }
