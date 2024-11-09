@@ -44,6 +44,13 @@ jobs:
     - name: Deploy
       run: |
         cd Blog.API
+        echo "Stopping processes that might be using the files..."
+        handle.exe C:\inetpub\wwwroot\apitesting.cafencode.ddns.net | ForEach-Object {
+          if ($_ -match 'pid: (\d+)') {
+            $pid = $matches[1]
+            taskkill /PID $pid /F
+          }
+        }
         echo "Copying files to the web root..."
         robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z
         $robocopyExitCode = $LASTEXITCODE
