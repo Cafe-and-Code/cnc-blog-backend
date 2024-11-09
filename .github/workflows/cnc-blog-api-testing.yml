@@ -41,9 +41,8 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
-    - name: Deploy
+    - name: Kill processes
       run: |
-        cd Blog.API
         echo "Stopping processes that might be using the files..."
         handle.exe C:\inetpub\wwwroot\apitesting.cafencode.ddns.net | ForEach-Object {
           if ($_ -match 'pid: (\d+)') {
@@ -51,6 +50,9 @@ jobs:
             taskkill /PID $pid /F
           }
         }
+    - name: Deploy
+      run: |
+        cd Blog.API
         echo "Copying files to the web root..."
         robocopy ./publish "C:\inetpub\wwwroot\apitesting.cafencode.ddns.net" /E /Z
         $robocopyExitCode = $LASTEXITCODE
