@@ -41,10 +41,17 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
+    - name: Read connection string from appsettings.json
+      id: get-connection-string
+      run: |
+        $appSettings = Get-Content -Raw -Path "./Blog.API/appsettings.json" | ConvertFrom-Json
+        $connectionString = $appSettings.ConnectionStrings.DefaultConnection
+        echo "::set-output name=connection-string::$connectionString"
+      shell: pwsh
     - name: Migrate
       run: |
         cd Blog.API
-        dotnet ef database update --configuration Release
+        dotnet ef database update --connection ${{ steps.get-connection-string.outputs.connection-string }}
         
   deploy:
     runs-on: self-hosted
