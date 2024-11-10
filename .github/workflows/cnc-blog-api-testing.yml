@@ -47,7 +47,7 @@ jobs:
         $appSettings = Get-Content -Raw -Path "./Blog.API/appsettings.json" | ConvertFrom-Json
         $connectionString = $appSettings.ConnectionStrings.DefaultConnection
         echo "::set-output name=connection-string::$connectionString"
-      shell: pwsh
+      shell: powershell
     - name: Migrate
       run: |
         cd Blog.API
