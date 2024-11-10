@@ -46,13 +46,6 @@ jobs:
           $escapedString = $connectionString -replace '"','\"'
           echo "connection_string=$escapedString" >> $env:GITHUB_ENV
         shell: powershell
-
-      - name: Check Current Identity
-        run: |
-          Write-Host "Current User: $env:USERNAME"
-          Write-Host "Current Identity: " 
-          whoami
-        shell: powershell
     
       - name: Install EF Tools
         run: |
