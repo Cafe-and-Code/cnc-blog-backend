@@ -34,7 +34,7 @@ jobs:
         cd Blog.API
         dotnet test --no-build --verbosity normal
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: app-artifacts
         path: |
@@ -46,7 +46,7 @@ jobs:
     needs: build
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: app-artifacts
           path: Blog.API
@@ -68,15 +68,15 @@ jobs:
       - name: Migrate
         run: |
           cd Blog.API
-          dotnet ef database update --connection "${{ env.connection_string }}"
+          dotnet ef database update --connection "${{ env.connection_string }}" --verbose
         shell: powershell
 
   deploy:
     runs-on: self-hosted
-    needs: [build, migrate] 
+    needs: [build, migrate]
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: app-artifacts
           path: Blog.API
@@ -90,7 +90,6 @@ jobs:
               taskkill /PID $pid /F
             }
           }
-
       - name: Deploy
         run: |
           cd Blog.API
