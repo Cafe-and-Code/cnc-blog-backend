@@ -12,5 +12,13 @@ namespace Blog.API.Repositories.Repository
         {
             _dbContext = dbContext;
         }
+
+        public new async Task<Category> AddAsync(Category category)
+        {
+            var currentDateTime = DateTime.UtcNow;
+            category.CreatedAt = currentDateTime;
+            category.UpdatedAt = currentDateTime;
+            return await base.AddAsync(category);
+        }
     }
 }

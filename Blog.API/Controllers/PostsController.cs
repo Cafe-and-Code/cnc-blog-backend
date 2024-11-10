@@ -14,11 +14,15 @@ namespace Blog.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPostRepository _postRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IPostCategoryRepository _postCategoryRepository;
 
-        public PostsController(IMapper mapper, IPostRepository postRepository)
+        public PostsController(IMapper mapper, IPostRepository postRepository, ICategoryRepository categoryRepository, IPostCategoryRepository postCategoryRepository)
         {
             _mapper = mapper;
             _postRepository = postRepository;
+            _categoryRepository = categoryRepository;
+            _postCategoryRepository = postCategoryRepository;
         }
 
         [HttpGet]
@@ -48,7 +52,25 @@ namespace Blog.API.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] AddPostDTO addPostDTO)
         {
-            await _postRepository.AddAsync(_mapper.Map<Post>(addPostDTO));
+            var post = await _postRepository.AddAsync(_mapper.Map<Post>(addPostDTO));
+
+            if (addPostDTO.Categories != null)
+            {
+                var categories = await _categoryRepository.GetAllAsync();
+
+                foreach (var category in addPostDTO.Categories)
+                {
+                    if (!categories.Any(c => category.Equals(c.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        await _categoryRepository.AddAsync(new Category() { Name = category });
+                    }
+                }
+
+                var categoriesLowerCase = addPostDTO?.Categories?.Select(x => x.ToLower()).ToList() ?? new List<string>();
+                var categoriesOfPost = await _categoryRepository.FindManyAsync(c => categoriesLowerCase.Contains(c.Name.ToLower()));
+
+                await _postCategoryRepository.AddManyAsync(categoriesOfPost.Select(c => new PostCategory() { PostId = post.Id, CategoryId = c.Id, Post = post, Category = c }).ToList());
+            }
 
             return Ok();
         }

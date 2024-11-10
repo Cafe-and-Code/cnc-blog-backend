@@ -4,5 +4,6 @@ namespace Blog.API.Repositories.IRepository
 {
     public interface ICategoryRepository : IBaseRepository<Category>
     {
+        new Task<Category> AddAsync(Category category);
     }
 }

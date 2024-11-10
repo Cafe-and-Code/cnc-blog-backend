@@ -32,7 +32,7 @@ namespace Blog.API.Repositories.Repository
         public new async Task<Post> AddAsync(Post post)
         {
             var currentDateTime = DateTime.UtcNow;
-            post.UpdatedAt = currentDateTime;
+            post.CreatedAt = currentDateTime;
             post.UpdatedAt = currentDateTime;
             return await base.AddAsync(post);
         }

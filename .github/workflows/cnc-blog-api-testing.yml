@@ -37,9 +37,18 @@ jobs:
         cd Blog.API
         dotnet test --no-build --verbosity normal
 
-  deploy:
+  migrate:
     runs-on: self-hosted
     needs: build
+    steps:
+    - name: Migrate
+      run: |
+        cd Blog.API
+        dotnet ef database update --project Blog.API --startup-project Blog.API --configuration Release
+        
+  deploy:
+    runs-on: self-hosted
+    needs: migrate
     steps:
     - name: Kill processes
       run: |
