@@ -41,22 +41,13 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
-    - name: Read connection string from appsettings.json
-      id: get-connection-string
-      run: |
-        $appSettings = Get-Content -Raw -Path "./Blog.API/appsettings.json" | ConvertFrom-Json
-        $connectionString = $appSettings.ConnectionStrings.DefaultConnection
-        $escapedString = $connectionString -replace '"','\"'
-        echo "connection_string=$escapedString" >> $env:GITHUB_ENV
-      shell: powershell
-    - name: Install EF Tools
-      run: |
-        dotnet tool install --global dotnet-ef
-      shell: powershell
-    - name: Migrate
+    - name: Read connection string from appsettings.json and migrate database
       run: |
         cd Blog.API
-        dotnet ef database update --connection "$env:connection_string"
+        $appSettings = Get-Content -Raw -Path "./appsettings.json" | ConvertFrom-Json
+        $connectionString = $appSettings.ConnectionStrings.DefaultConnection
+        $escapedString = $connectionString -replace '"','\"'
+        dotnet ef database update --connection "$escapedString"
       shell: powershell
         
   deploy:
