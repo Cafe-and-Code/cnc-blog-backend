@@ -33,24 +33,11 @@ jobs:
       run: |
         cd Blog.API
         dotnet test --no-build --verbosity normal
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-artifacts
-        path: |
-          Blog.API/publish/
-          Blog.API/appsettings.json
 
   migrate:
     runs-on: self-hosted
     needs: build
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: app-artifacts
-          path: Blog.API
-
       - name: Read connection string
         id: get-connection-string
         run: |
@@ -58,6 +45,13 @@ jobs:
           $connectionString = $appSettings.ConnectionStrings.DefaultConnection
           $escapedString = $connectionString -replace '"','\"'
           echo "connection_string=$escapedString" >> $env:GITHUB_ENV
+        shell: powershell
+
+      - name: Check Current Identity
+        run: |
+          Write-Host "Current User: $env:USERNAME"
+          Write-Host "Current Identity: " 
+          whoami
         shell: powershell
     
       - name: Install EF Tools
@@ -74,13 +68,7 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs: [build, migrate]
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: app-artifacts
-          path: Blog.API
-          
+    steps:    
       - name: Kill processes
         run: |
           echo "Stopping processes that might be using the files..."
