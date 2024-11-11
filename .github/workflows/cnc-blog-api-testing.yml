@@ -55,7 +55,7 @@ jobs:
       - name: Migrate
         run: |
           cd Blog.API
-          dotnet ef database update --connection "${{ env.connection_string }}" --verbose
+          dotnet ef database update --connection "${{ env.connection_string }}"
         shell: powershell
 
   deploy:
