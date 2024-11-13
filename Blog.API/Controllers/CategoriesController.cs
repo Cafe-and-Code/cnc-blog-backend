@@ -36,7 +36,7 @@ namespace Blog.API.Controllers
             return Ok(categories?.Select(c => c.Name));
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddCategoryDTO addCategoryDTO)
         {
             if (await _categoryRepository.AnyAsync(c => addCategoryDTO.Name.ToLower().Equals(c.Name.ToLower())))
@@ -50,7 +50,7 @@ namespace Blog.API.Controllers
             await _categoryRepository.AddAsync(new Category() { Name = addCategoryDTO.Name });
 
             return Ok();
-        }*/
+        }
 
         [HttpPut]
         [Route("{id:Guid}")]
