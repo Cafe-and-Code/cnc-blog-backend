@@ -32,7 +32,7 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> GetByName([FromRoute] string name)
         {
             var categories = await _categoryRepository.FindManyAsync(category => category.Name.Contains(name));
-            return Ok(categories);
+            return Ok(categories?.Select(c => c.Name));
         }
 
         [HttpPost]
