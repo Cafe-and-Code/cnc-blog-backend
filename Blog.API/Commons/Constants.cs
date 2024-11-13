@@ -31,6 +31,7 @@ namespace Blog.API.Commons
         public const string InvalidUsernameOrPasswordMessage = "Invalid username or password.";
         public const string UsernameAlreadyExists = "Username '{0}' already exists.";
         public const string EmailAlreadyExists = "Email '{0}' already exists.";
+        public const string CategoryAlreadyExists = "Category already exists.";
 
         /// <summary>
         /// Exception Log

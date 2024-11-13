@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using Blog.API.Commons;
 using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
-using Blog.API.Repositories.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
@@ -35,18 +36,21 @@ namespace Blog.API.Controllers
             return Ok(categories?.Select(c => c.Name));
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> Create([FromBody] AddCategoryDTO addCategoryDTO)
         {
-            var category = _mapper.Map<Category>(addCategoryDTO);
-            var currentDateTime = DateTime.UtcNow;
+            if (await _categoryRepository.AnyAsync(c => addCategoryDTO.Name.ToLower().Equals(c.Name.ToLower())))
+            {
+                return StatusCode(
+                    StatusCodes.Status409Conflict,
+                    new ApiErrorResponse(StatusCodes.Status409Conflict, Constants.Conflict, Constants.CategoryAlreadyExists)
+                );
+            }
 
-            category.CreatedAt = currentDateTime;
-            category.UpdatedAt = currentDateTime;
+            await _categoryRepository.AddAsync(new Category() { Name = addCategoryDTO.Name });
 
-            await _categoryRepository.AddAsync(category);
             return Ok();
-        }
+        }*/
 
         [HttpPut]
         [Route("{id:Guid}")]
@@ -67,6 +71,7 @@ namespace Blog.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = nameof(UserRole.Admin))]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var user = await _categoryRepository.FindOneAsync(category => category.Id == id);

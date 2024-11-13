@@ -56,11 +56,9 @@ namespace Blog.API.Controllers
 
             if (addPostDTO.Categories != null)
             {
-                var categories = await _categoryRepository.GetAllAsync();
-
                 foreach (var category in addPostDTO.Categories)
                 {
-                    if (!categories.Any(c => category.Equals(c.Name, StringComparison.OrdinalIgnoreCase)))
+                    if (!await _categoryRepository.AnyAsync(c => category.ToLower().Equals(c.Name.ToLower())))
                     {
                         await _categoryRepository.AddAsync(new Category() { Name = category });
                     }
