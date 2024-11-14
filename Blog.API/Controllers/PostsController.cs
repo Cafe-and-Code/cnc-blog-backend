@@ -5,6 +5,7 @@ using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace Blog.API.Controllers
 {
@@ -44,8 +45,16 @@ namespace Blog.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var user = await _postRepository.FindOneAsync(post => post.Id == id);
-            return Ok(user);
+            var post = await _postRepository.FindOneAsync(post => post.Id == id);
+            return Ok(_mapper.Map<PostDTO>(post));
+        }
+
+        [HttpGet]
+        [Route("{title}")]
+        public async Task<IActionResult> GetByName([FromRoute] string title)
+        {
+            var post = await _postRepository.FindOneAsync(post => post.Title.ToLower().Equals(title.ToLower()));
+            return Ok(_mapper.Map<PostDTO>(post));
         }
 
         [HttpPost]
