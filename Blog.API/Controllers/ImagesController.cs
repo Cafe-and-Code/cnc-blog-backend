@@ -3,7 +3,6 @@ using Blog.API.Models.Domain;
 using Blog.API.Models.DTO;
 using Blog.API.Repositories.IRepository;
 using Blog.API.Commons;
-using Blog.API.Repositories.Repository;
 
 namespace Blog.API.Controllers
 {
@@ -39,14 +38,13 @@ namespace Blog.API.Controllers
                 var imageDomainModel = new Image
                 {
                     File = request.File,
-                    FileExtension = Path.GetExtension(request.File.FileName),
+                    FileExtension = Constants.DefaultImageExtension,
                     FileSizeInBytes = request.File.Length,
-                    FileName = request.FileName,
+                    FileName = Guid.NewGuid().ToString(),
                     FileDescription = request.FileDescription,
                     FilePath = string.Empty
                 };
 
-                // User repository to upload image
                 await _imageRepository.Upload(imageDomainModel);
 
                 return Ok(imageDomainModel);
@@ -58,7 +56,7 @@ namespace Blog.API.Controllers
 
         private void ValidateFileUpload(ImageUploadDTO request, ApiErrorResponse apiError)
         {
-            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".gif", "webp" };
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 
             if (!allowedExtensions.Contains(Path.GetExtension(request.File.FileName).ToLower()))
             {

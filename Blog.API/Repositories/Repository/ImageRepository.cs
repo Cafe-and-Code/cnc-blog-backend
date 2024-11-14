@@ -1,10 +1,15 @@
 ﻿using Blog.API.Data;
 using Blog.API.Models.Domain;
 using Blog.API.Repositories.IRepository;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Webp;
+/*using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.Processing;*/
 
 namespace Blog.API.Repositories.Repository
 {
-    public class ImageRepository : BaseRepository<Image>, IImageRepository
+    public class ImageRepository : BaseRepository<Models.Domain.Image>, IImageRepository
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -19,15 +24,16 @@ namespace Blog.API.Repositories.Repository
             _dbContext = dbContext;
         }
 
-
-        public async Task<Image> Upload(Image image)
+        public async Task<Models.Domain.Image> Upload(Models.Domain.Image image)
         {
-            var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images",
-                $"{image.FileName}{image.FileExtension}");
+            var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{image.FileName}{image.FileExtension}");
 
-            // Upload Image to Local Path
-            using var stream = new FileStream(localFilePath, FileMode.Create);
-            await image.File.CopyToAsync(stream);
+            // Convert to WebP
+            using (var imageSharpImage = SixLabors.ImageSharp.Image.Load(image.File.OpenReadStream()))
+            {
+                // Save file to local path
+                await imageSharpImage.SaveAsync(localFilePath, new WebpEncoder());
+            }
 
             // Ensure HttpContext is not null
             var httpContext = _httpContextAccessor.HttpContext;

@@ -5,6 +5,11 @@ namespace Blog.API.Commons
     public static class Constants
     {
         /// <summary>
+        /// Default values
+        /// </summary>
+        public const string DefaultImageExtension = ".webp";
+
+        /// <summary>
         /// Validate model Message For User
         /// </summary>
         public const string ErrorUsernameRequiredMessage = "Username is required.";
