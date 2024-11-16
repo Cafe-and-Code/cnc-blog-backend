@@ -72,7 +72,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpDelete]
+        /*[HttpDelete]
         [Route("Unused")]
         [Authorize(Roles = nameof(UserRole.Admin))]
         public async Task<IActionResult> DeleteUnusedImages()
@@ -138,6 +138,6 @@ namespace Blog.API.Controllers
             await _imageRepository.DeleteAsync(image);
 
             return Ok();
-        }
+        }*/
     }
 }
