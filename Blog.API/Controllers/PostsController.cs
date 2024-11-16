@@ -106,16 +106,16 @@ namespace Blog.API.Controllers
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var user = await _postRepository.FindOneAsync(post => post.Id == id);
+            var post = await _postRepository.FindOneAsync(post => post.Id == id);
 
-            if (user == null)
+            if (post == null)
             {
                 return NotFound(
                     new ApiErrorResponse(StatusCodes.Status404NotFound, Constants.NotFound, Constants.NotFound)
                 );
             }
 
-            await _postRepository.DeleteAsync(user);
+            await _postRepository.DeleteAsync(post);
             return Ok();
         }
     }

@@ -37,6 +37,7 @@ namespace Blog.API.Commons
         public const string UsernameAlreadyExists = "Username '{0}' already exists.";
         public const string EmailAlreadyExists = "Email '{0}' already exists.";
         public const string CategoryAlreadyExists = "Category already exists.";
+        public const string ImageInUse = "This image is in use.";
 
         /// <summary>
         /// Exception Log
