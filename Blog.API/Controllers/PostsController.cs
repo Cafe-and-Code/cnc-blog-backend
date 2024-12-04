@@ -38,7 +38,9 @@ namespace Blog.API.Controllers
                 );
             }
 
-            return Ok(_mapper.Map<List<PostDTO>>(posts));
+            var totalPosts = (await _postRepository.FindManyAsync(post => !post.IsDeleted && post.Status == (int)PostStatus.Public)).Count();
+
+            return Ok(new BlogPostsDTO(totalPosts,_mapper.Map<List<PostDTO>>(posts)));
         }
 
         [HttpGet]
