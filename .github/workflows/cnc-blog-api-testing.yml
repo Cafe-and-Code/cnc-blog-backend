@@ -61,7 +61,11 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs: [build, migrate]
-    steps:    
+    steps: 
+      - name: Stop IIS
+        run: |
+          echo "Stopping IIS Server..."
+          iisreset /stop   
       - name: Kill processes
         run: |
           echo "Stopping processes that might be using the files..."
@@ -79,4 +83,9 @@ jobs:
           $robocopyExitCode = $LASTEXITCODE
           if ($robocopyExitCode -ge 8) { echo "File copy failed with exit code $robocopyExitCode"; exit $robocopyExitCode }
           echo "Complete Copy files to the web root."
+          exit 0
+      - name: Start IIS
+        run: |
+          echo "Starting IIS Server..."
+          iisreset /start
           exit 0
