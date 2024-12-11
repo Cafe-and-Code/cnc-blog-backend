@@ -20,6 +20,15 @@ namespace Blog.API.Mappings
                     src.PostCategory != null ?
                     src.PostCategory.Select(pc => pc.Category.Name).ToList() :
                     new List<string>()));
+            
+            CreateMap<Models.DTO.PostDetailDTO, Models.Domain.Post>()
+                .ForPath(dest => dest.Author.FullName, opt => opt.MapFrom(src => src.Author))
+                .ForMember(dest => dest.PostCategory, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src =>
+                    src.PostCategory != null ?
+                    src.PostCategory.Select(pc => pc.Category.Name).ToList() :
+                    new List<string>()));
 
             CreateMap<Models.Domain.Post, Models.DTO.AddPostDTO>().ReverseMap();
             CreateMap<Models.Domain.Post, Models.DTO.UpdatePostDTO>().ReverseMap();

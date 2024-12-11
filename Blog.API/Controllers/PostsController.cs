@@ -48,7 +48,7 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var post = await _postRepository.FindOneAsync(post => post.Id == id);
-            return Ok(_mapper.Map<PostDTO>(post));
+            return Ok(_mapper.Map<PostDetailDTO>(post));
         }
 
         [HttpGet]
@@ -56,7 +56,7 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> GetByName([FromRoute] string title)
         {
             var post = await _postRepository.FindOneAsync(post => post.Title.ToLower().Equals(title.ToLower()));
-            return Ok(_mapper.Map<PostDTO>(post));
+            return Ok(_mapper.Map<PostDetailDTO>(post));
         }
 
         [HttpPost]
