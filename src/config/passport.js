@@ -12,15 +12,16 @@ function configurePassport() {
     return;
   }
 
+  const issuerUrl = process.env.AUTHENTIK_ISSUER.trim().replace(/\/+$/, "");
+
   passport.use(
     'authentik',
     new OpenIdConnectStrategy(
       {
         issuer: process.env.AUTHENTIK_ISSUER,
-
-        authorizationURL: `${process.env.AUTHENTIK_ISSUER}authorize`,
-        tokenURL: `${process.env.AUTHENTIK_ISSUER}token`,
-        userInfoURL: `${process.env.AUTHENTIK_ISSUER}userinfo`,
+        authorizationURL: `${issuerUrl}/authorize`,
+        tokenURL: `${issuerUrl}/token`,
+        userInfoURL: `${issuerUrl}/userinfo`,
         clientID: process.env.AUTHENTIK_CLIENT_ID,
         clientSecret: process.env.AUTHENTIK_CLIENT_SECRET,
         callbackURL: process.env.AUTHENTIK_CALLBACK_URL,
