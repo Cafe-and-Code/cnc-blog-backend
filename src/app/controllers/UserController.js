@@ -46,9 +46,10 @@ class UserController {
         fullName,
         dateOfBirth,
         avatarImageUrl,
+        authProvider: 'local',
+        isSSOUser: false,
       });
       if (user) {
-        // res.status(201).json({ _id: user.id, email: user.email });
         res.status(201).json({ message: "User registered successfully" });
       } else {
         res
@@ -59,18 +60,28 @@ class UserController {
       next(err);
     }
   }
+
   // [POST] /login accessToken
   async login(req, res, next) {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
-        res
+        return res
           .status(400)
           .json({ status: 400, message: "All fields are mandatory!" });
       }
       const user = await User.findOne({
         username,
       });
+
+      // Check if user is SSO-only (no password)
+      if (user && !user.password) {
+        return res.status(401).json({
+          status: 401,
+          message: "This account uses SSO login. Please use Authentik SSO to sign in.",
+        });
+      }
+
       // Compare password with hashed password
       if (user && (await bcrypt.compare(password, user.password))) {
         const accessToken = jwt.sign(
@@ -97,6 +108,7 @@ class UserController {
       next(err);
     }
   }
+
   // [GET] /current
   async profile(req, res, next) {
     try {

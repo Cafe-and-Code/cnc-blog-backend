@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 async function connect() {
-    const dbUri = 'mongodb://localhost:27017/blog_express';
+    const dbUri = process.env.MONGO_URI || 'mongodb://localhost:27017/blog_express';
     try {
         await mongoose.connect(dbUri);
         console.log('Database connection successful');
@@ -10,4 +10,4 @@ async function connect() {
         process.exit(1);
     }
 }
-module.exports = { connect };
+module.exports = { connect };

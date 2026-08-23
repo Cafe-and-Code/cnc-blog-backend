@@ -51,9 +51,9 @@ class NewsController {
   async Create(req, res, next) {
     const { title, content, description, image, categories } = req.body;
     if (!title || !content || !description || !image || !categories) {
-      res
-        .status(404)
-        .json({ status: 404, message: "All fields are required!" });
+      return res
+        .status(400)
+        .json({ status: 400, message: "All fields are required!" });
     }
     try {
       const newPost = await Post.create({
@@ -62,13 +62,12 @@ class NewsController {
         description,
         image,
         categories,
-        user_id: req.user.id, // Lấy user_id từ req.user
+        user_id: req.user ? req.user.id : undefined,
       });
 
-      res.status(201).json(newPost);
-      res.status(201).json({
+      return res.status(201).json({
         message: "Post created successfully",
-        post: newPost
+        post: newPost,
       });
     } catch (error) {
       next(error);

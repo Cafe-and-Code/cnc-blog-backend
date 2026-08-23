@@ -18,32 +18,30 @@ class BlogController {
   async detail(req, res, next) {
     try {
       const blogItem = await Blog.findOne({ slug: req.params.slug });
-      if (blogDetail.user_id !== req.user.id) {
-        res.status(403).json({
-          status: 403,
-          message: "User is not authorized to view this blog",
+      if (!blogItem) {
+        return res.status(404).json({
+          status: 404,
+          message: "Blog not found",
         });
       }
-      // res.render("blogs/show", { blog: mongooseToObject(blogItem) });
       res.json(mongooseToObject(blogItem));
     } catch (err) {
       next(err);
     }
   }
   async create(req, res, next) {
-    // res.render("blogs/create");
     const { name, description, level } = req.body;
     if (!name || !description || !level) {
-      res
-        .status(404)
-        .json({ status: 404, message: "All fields are required!" });
+      return res
+        .status(400)
+        .json({ status: 400, message: "All fields are required!" });
     }
     try {
       const newBlog = await Blog.create({
         name,
         description,
         level,
-        user_id: req.user.id, // Lấy user_id từ req.user
+        user_id: req.user ? req.user.id : undefined,
       });
       res.status(201).json(newBlog);
     } catch (error) {
@@ -55,13 +53,18 @@ class BlogController {
   async edit(req, res, next) {
     try {
       const blogDetail = await Blog.findById(req.params.id);
-      if (blogDetail.user_id !== +req.user.id) {
-        res.status(403).json({
+      if (!blogDetail) {
+        return res.status(404).json({
+          status: 404,
+          message: "Blog not found",
+        });
+      }
+      if (blogDetail.user_id && req.user && blogDetail.user_id !== +req.user.id) {
+        return res.status(403).json({
           status: 403,
           message: "User is not authorized to edit this blog",
         });
       }
-      // res.render("blogs/edit", { blog: mongooseToObject(blogDetail) });
       res.json(mongooseToObject(blogDetail));
     } catch (error) {
       next(error);

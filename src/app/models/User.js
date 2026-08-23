@@ -18,7 +18,7 @@ const User = new Schema(
     password: {
       type: String,
       maxLength: 255,
-      required: [true, "please add the user password"],
+      // Required only for non-SSO users
     },
     fullName: {
       type: String,
@@ -28,18 +28,35 @@ const User = new Schema(
     dateOfBirth: {
       type: String,
       maxLength: 255,
-      required: [true, "please add the user date of birth"],
+      // Optional for SSO users
     },
     avatarImageUrl: {
       type: String,
       maxLength: 255,
-      required: [true, "please add the user date of birth"],
+    },
+    // SSO Authentication Fields
+    authProvider: {
+      type: String,
+      enum: ['local', 'authentik', 'google', 'github', null],
+      default: 'local',
+    },
+    authProviderId: {
+      type: String,
+      maxLength: 255,
+    },
+    // SSO users may not have a local password
+    isSSOUser: {
+      type: Boolean,
+      default: false,
     },
   },
   {
     timestamps: true,
   }
 );
+
+// Compound index for SSO lookup
+User.index({ authProvider: 1, authProviderId: 1 }, { sparse: true });
 
 User.plugin(autoIncrement, { inc_field: "id" });
 

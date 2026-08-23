@@ -2,11 +2,14 @@ class UploadController {
   async image(req, res, next) {
     try {
       if (!req.file) {
-        res.status(400).json({ status: 400, message: "No file uploaded" });
+        return res.status(400).json({ status: 400, message: "No file uploaded" });
       }
-      const fileUrl = `http://localhost:8888/images/${req.file.filename}`;
+      const baseUrl =
+        process.env.BACKEND_URL ||
+        `${req.protocol}://${req.get("host")}`;
+      const fileUrl = `${baseUrl}/images/${req.file.filename}`;
       res.json({
-        message: "Upload sucess",
+        message: "Upload success",
         filePath: fileUrl,
       });
     } catch (err) {

@@ -11,7 +11,7 @@ class MeController {
       }),
     ])
       .then(([blogs, deletedCount]) => {
-        res.render("me/stored-blogs", {
+        res.json({
           deletedCount,
           blogs: multiplemongooseToObject(blogs),
         });
@@ -22,7 +22,7 @@ class MeController {
   trashBlogs(req, res, next) {
     Blog.findWithDeleted({ deleted: true })
       .then((blogs) => {
-        res.render("me/trash-blogs", {
+        res.json({
           blogs: multiplemongooseToObject(blogs),
         });
       })
@@ -31,3 +31,4 @@ class MeController {
 }
 
 module.exports = new MeController();
+
